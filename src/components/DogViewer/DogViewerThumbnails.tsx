@@ -4,31 +4,20 @@ export const DogViewerThumbnails = ({
   data = [],
   selectedDog,
   onSelect,
-  addToFavorite,
 }: {
   data: DogsDataRemapped[];
   selectedDog: string | null;
   onSelect: (dogImgUrl: string) => void;
-  addToFavorite: (dogImgUrl: string) => void;
 }) => {
   return (
     <ul className="dog-viewer-thumbnail-list">
       {data.map(({ dogImgUrl, breedValue }) => (
-        <li
-          key={dogImgUrl}
-          className={`dog-viewer-thumbnail-item ${selectedDog === dogImgUrl ? "selected" : ""}`}
-          // tabIndex={0}
-          // onKeyDown={(e) => {
-          //   if (e.key === "Enter" || e.key === " ") {
-          //     e.preventDefault();
-          //     handleDogClick(dogImgUrl);
-          //   }
-          // }}
-        >
+        <li key={dogImgUrl}>
           <button
             type="button"
-            className="dog-viewer-thumbnail-button"
-            aria-label={`select dog breed ${breedValue}`}
+            className={`dog-viewer-thumbnail-button ${selectedDog === dogImgUrl ? "selected" : ""}`}
+            aria-label={`Select dog ${breedValue}`}
+            title={`Select dog ${breedValue}`}
             onClick={() => onSelect(dogImgUrl)}
           >
             <img
@@ -36,10 +25,6 @@ export const DogViewerThumbnails = ({
               src={dogImgUrl}
               alt={`dog image ${breedValue}`}
             />
-          </button>
-          <p className="dog-viewer-thumbnail-breed-value">{breedValue}</p>
-          <button type="button" onClick={() => addToFavorite(dogImgUrl)}>
-            Favorite
           </button>
         </li>
       ))}

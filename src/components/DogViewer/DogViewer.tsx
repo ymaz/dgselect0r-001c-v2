@@ -83,7 +83,7 @@ export const DogViewer = ({ itemsLimit = 10 }) => {
 
   return (
     <div className="dog-viewer">
-      <div className="dog-viewer-main">
+      <main className="dog-viewer-main">
         <div className="dog-viewer-selected">
           {selectedDog ? (
             <>
@@ -92,8 +92,18 @@ export const DogViewer = ({ itemsLimit = 10 }) => {
                 className="dog-viewer-selected-img"
                 alt="Current selected dog image"
               />
-              <p className="dog-viewer-selected-value">
-                {getBreedValueFromUrl(selectedDog)}
+              <p className="dog-viewer-selected-footer">
+                <span className="dog-viewer-selected-value">
+                  {getBreedValueFromUrl(selectedDog)}
+                </span>
+                <button
+                  type="button"
+                  title="Add current selected dog to favorite list"
+                  className="dog-viewer-selected-button"
+                  onClick={() => addToFavorite(selectedDog)}
+                >
+                  Favorite
+                </button>
               </p>
             </>
           ) : (
@@ -103,13 +113,13 @@ export const DogViewer = ({ itemsLimit = 10 }) => {
         <DogViewerThumbnails
           data={remappedData ?? []}
           onSelect={onSelect}
-          addToFavorite={addToFavorite}
           selectedDog={selectedDog}
         />
-      </div>
+      </main>
       {favorites.size > 0 && (
         <DogViewerFavorite
           data={favorites}
+          onSelect={onSelect}
           deleteFromFavorite={deleteFromFavorite}
         />
       )}
