@@ -33,18 +33,22 @@ export const DogViewer = ({ itemsLimit = 10 }) => {
   const { data, loading, error } = useFetch<DogsData>(URL);
   const [userSelectedDog, setUserSelectedDog] = useState<string | null>(null);
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
-  const remappedData = data?.message?.map(
-    (item): DogsDataRemapped => ({
-      dogImgUrl: item,
-      breedValue: getBreedValueFromUrl(item),
-    }),
+  const remappedData = useMemo(
+    () =>
+      data?.message?.map(
+        (item): DogsDataRemapped => ({
+          dogImgUrl: item,
+          breedValue: getBreedValueFromUrl(item),
+        }),
+      ) ?? [],
+    [data?.message],
   );
   const initialRandomDog = useMemo(() => {
     if (data?.message?.length) {
       return data.message[getRandomIndex(data.message.length)];
     }
     return null;
-  }, [data?.message]);
+  }, [data]);
   const selectedDog = userSelectedDog ?? initialRandomDog;
 
   const onSelect = (dogImgUrl: string) => {
@@ -52,25 +56,15 @@ export const DogViewer = ({ itemsLimit = 10 }) => {
   };
 
   const addToFavorite = (dogImgUrl: string) => {
-    if (!favorites.has(dogImgUrl)) {
-      setFavorites((prev) => {
-        const newFavorites = new Set(prev);
-
-        newFavorites.add(dogImgUrl);
-        return newFavorites;
-      });
-    }
+    setFavorites((prev) => new Set(prev).add(dogImgUrl));
   };
 
   const deleteFromFavorite = (dogImgUrl: string) => {
-    if (favorites.has(dogImgUrl)) {
-      setFavorites((prev) => {
-        const newFavorites = new Set(prev);
-
-        newFavorites.delete(dogImgUrl);
-        return newFavorites;
-      });
-    }
+    setFavorites((prev) => {
+      const newFavorites = new Set(prev);
+      newFavorites.delete(dogImgUrl);
+      return newFavorites;
+    });
   };
 
   if (loading) return <p>Loading...</p>;
@@ -111,7 +105,7 @@ export const DogViewer = ({ itemsLimit = 10 }) => {
           )}
         </div>
         <DogViewerThumbnails
-          data={remappedData ?? []}
+          data={remappedData}
           onSelect={onSelect}
           selectedDog={selectedDog}
         />
