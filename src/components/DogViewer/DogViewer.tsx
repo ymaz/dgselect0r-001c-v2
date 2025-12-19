@@ -3,6 +3,7 @@ import { useFetch } from "../../hooks/useFetch";
 import { DogViewerThumbnails } from "./DogViewerThumbnails";
 import { DogViewerFavorite } from "./DogViewerFavorite";
 import { RANDOM_DOG_API } from "../../constants";
+import { dataTestIds } from "../../dataTestIds";
 import "./DogViewer.css";
 
 export interface DogsData {
@@ -67,16 +68,17 @@ export const DogViewer = ({ itemsLimit = 10 }) => {
     });
   };
 
-  if (loading) return <p>Loading...</p>;
+  if (loading)
+    return <p data-testid={dataTestIds.dogViewer.loading}>Loading...</p>;
   if (error)
     return (
-      <p>
+      <p data-testid={dataTestIds.dogViewer.error}>
         Error: <pre>{error}</pre>
       </p>
     );
 
   return (
-    <div className="dog-viewer">
+    <div className="dog-viewer" data-testid={dataTestIds.dogViewer.container}>
       <main className="dog-viewer-main">
         <div className="dog-viewer-selected">
           {selectedDog ? (
@@ -85,15 +87,20 @@ export const DogViewer = ({ itemsLimit = 10 }) => {
                 src={selectedDog}
                 className="dog-viewer-selected-img"
                 alt="Current selected dog image"
+                data-testid={dataTestIds.dogViewer.selectedImage}
               />
               <p className="dog-viewer-selected-footer">
-                <span className="dog-viewer-selected-value">
+                <span
+                  className="dog-viewer-selected-value"
+                  data-testid={dataTestIds.dogViewer.selectedBreed}
+                >
                   {getBreedValueFromUrl(selectedDog)}
                 </span>
                 <button
                   type="button"
                   title="Add current selected dog to favorite list"
                   className="dog-viewer-selected-button"
+                  data-testid={dataTestIds.dogViewer.favoriteButton}
                   onClick={() => addToFavorite(selectedDog)}
                 >
                   Favorite

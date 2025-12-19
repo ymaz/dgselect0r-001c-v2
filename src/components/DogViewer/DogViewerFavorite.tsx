@@ -1,3 +1,5 @@
+import { dataTestIds } from "../../dataTestIds";
+
 export const DogViewerFavorite = ({
   data,
   deleteFromFavorite,
@@ -8,7 +10,10 @@ export const DogViewerFavorite = ({
   onSelect: (dogImgUrl: string) => void;
 }) => {
   return (
-    <aside className="dog-viewer-favorite">
+    <aside
+      className="dog-viewer-favorite"
+      data-testid={dataTestIds.dogViewer.favoritesSection}
+    >
       <h2 className="dog-viewer-favorite-title">Favorites: {data.size}</h2>
       <ul className="dog-viewer-favorite-list">
         {[...data].map((dogImgUrl: string) => (
